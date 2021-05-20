@@ -36,7 +36,10 @@ class CharacterListReducer @Inject constructor() :
     }
 
     private infix fun SuccessUiState.reduce(result: CharacterListResult): CharacterListUiState {
-        throw UnsupportedReduceException(this, result)
+        return when (result) {
+            is NavigateToResult.GoToDetail -> this
+            else -> throw UnsupportedReduceException(this, result)
+        }
     }
 
     private infix fun ErrorUiState.reduce(result: CharacterListResult): CharacterListUiState {

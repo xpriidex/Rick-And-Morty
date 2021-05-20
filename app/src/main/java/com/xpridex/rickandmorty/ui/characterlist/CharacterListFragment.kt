@@ -26,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -40,6 +41,8 @@ class CharacterListFragment : Fragment(), MviUi<CharacterListUIntent, CharacterL
 
     @Inject
     lateinit var navigator: Navigator
+
+    private val userIntents: MutableSharedFlow<CharacterListUIntent> = MutableSharedFlow()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,10 +71,19 @@ class CharacterListFragment : Fragment(), MviUi<CharacterListUIntent, CharacterL
         }
     }
 
-    override fun userIntents(): Flow<CharacterListUIntent> = merge(initialUserIntent())
+    override fun userIntents(): Flow<CharacterListUIntent> = merge(
+        initialUserIntent(),
+        userIntents.asSharedFlow()
+    )
 
     private fun initialUserIntent(): Flow<CharacterListUIntent> = flow {
         emit(InitialUIntent)
+    }
+
+    private fun onItemCharacterTapped(id: Int) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            userIntents.emit(SeeDetailUIntent(id))
+        }
     }
 
     private fun setupCollectors() {
@@ -105,9 +117,7 @@ class CharacterListFragment : Fragment(), MviUi<CharacterListUIntent, CharacterL
 
     private fun showCharacters(characters: List<DomainCharacterItem>) {
         val adapter = ListCharacterAdapter(characters) {
-            context?.let {
-                Toast.makeText(it, "Hello Javatpoint", Toast.LENGTH_LONG).show()
-            }
+            onItemCharacterTapped(it)
         }
         binding?.apply {
             rvCharacters.adapter = adapter
@@ -129,8 +139,10 @@ class CharacterListFragment : Fragment(), MviUi<CharacterListUIntent, CharacterL
         }
     }
 
-    private fun goToCharacterEdit(id: String) {
-        TODO("Not yet implemented")
+    private fun goToCharacterEdit(id: Int) {
+        binding?.let {
+            navigator.goToCharacterDetail(it.root, id)
+        }
     }
 
     override fun onDestroy() {

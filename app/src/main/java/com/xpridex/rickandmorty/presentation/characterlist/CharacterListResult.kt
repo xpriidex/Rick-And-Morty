@@ -10,4 +10,8 @@ sealed class CharacterListResult : MviResult {
         data class Success(val results: List<DomainCharacterItem>) : CharacterListResult()
         object Error : CharacterListResult()
     }
+
+    sealed class NavigateToResult : CharacterListResult() {
+        data class GoToDetail(val id: Int) : NavigateToResult()
+    }
 }

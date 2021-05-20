@@ -5,4 +5,6 @@ import com.xpridex.rickandmorty.core.mvi.events.MviUserIntent
 sealed class CharacterListUIntent : MviUserIntent {
 
     object InitialUIntent : CharacterListUIntent()
+
+    data class SeeDetailUIntent(val id: Int) : CharacterListUIntent()
 }

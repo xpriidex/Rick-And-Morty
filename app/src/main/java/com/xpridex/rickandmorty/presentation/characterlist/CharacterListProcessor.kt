@@ -2,10 +2,10 @@ package com.xpridex.rickandmorty.presentation.characterlist
 
 import com.xpridex.rickandmorty.core.execution.CoroutineExecutionThread
 import com.xpridex.rickandmorty.domain.GetCharacterListUseCase
-import com.xpridex.rickandmorty.presentation.characterlist.CharacterListAction.*
-import com.xpridex.rickandmorty.presentation.characterlist.CharacterListResult.*
-import com.xpridex.rickandmorty.presentation.splash.SplashResult.*
-import kotlinx.coroutines.delay
+import com.xpridex.rickandmorty.presentation.characterlist.CharacterListAction.GetCharacterListAction
+import com.xpridex.rickandmorty.presentation.characterlist.CharacterListAction.GoToDetailAction
+import com.xpridex.rickandmorty.presentation.characterlist.CharacterListResult.GetCharacterListResult
+import com.xpridex.rickandmorty.presentation.characterlist.CharacterListResult.NavigateToResult
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
@@ -17,6 +17,7 @@ class CharacterListProcessor @Inject constructor(
     fun actionProcessor(actions: CharacterListAction): Flow<CharacterListResult> =
         when (actions) {
             is GetCharacterListAction -> getCharacterListActionProcessor()
+            is GoToDetailAction -> goToDetailActionProcessor(actions.id)
         }
 
     private fun getCharacterListActionProcessor(): Flow<CharacterListResult> =
@@ -26,8 +27,11 @@ class CharacterListProcessor @Inject constructor(
             }.onStart {
                 emit(GetCharacterListResult.InProgress)
             }.catch {
-                it
                 emit(GetCharacterListResult.Error)
             }
             .flowOn(coroutineThreadProvider.ioThread())
+
+    private fun goToDetailActionProcessor(id: Int): Flow<CharacterListResult> = flow {
+        emit(NavigateToResult.GoToDetail(id))
+    }
 }

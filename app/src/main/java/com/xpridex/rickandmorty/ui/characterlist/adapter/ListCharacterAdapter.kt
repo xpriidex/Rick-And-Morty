@@ -8,8 +8,8 @@ import com.xpridex.rickandmorty.domain.model.DomainCharacterItem
 import com.xpridex.rickandmorty.ui.characterlist.adapter.viewholder.CharacterViewHolder
 
 class ListCharacterAdapter(
-    val items: List<DomainCharacterItem>,
-    val onClickListener: () -> Unit
+    private val items: List<DomainCharacterItem>,
+    private val onItemClickListener: (Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -21,6 +21,6 @@ class ListCharacterAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val summary = items[position]
-        (holder as CharacterViewHolder).bind(summary, onClickListener)
+        (holder as CharacterViewHolder).bind(summary, onItemClickListener)
     }
 }

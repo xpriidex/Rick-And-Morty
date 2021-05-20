@@ -5,7 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.xpridex.rickandmorty.core.mvi.MviPresentation
 import com.xpridex.rickandmorty.core.mvi.MviPresentationEffect
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListAction.*
+import com.xpridex.rickandmorty.presentation.characterlist.CharacterListResult.*
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUIntent.*
+import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUiEffect.*
+import com.xpridex.rickandmorty.presentation.splash.SplashUiEffect
+import com.xpridex.rickandmorty.presentation.splash.SplashUiEffect.*
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,7 +37,7 @@ class CharacterListViewModel @Inject constructor(
             .flatMapMerge { userIntent ->
                 actionProcessorHolder.actionProcessor(userIntent.toAction())
             }
-           // .handleEffect()
+            .handleEffect()
             .scan(defaultUiState) { previousUiState, result ->
                 with(reducer) { previousUiState reduce result }
             }
@@ -46,18 +50,19 @@ class CharacterListViewModel @Inject constructor(
     private fun CharacterListUIntent.toAction(): CharacterListAction {
         return when (this) {
             InitialUIntent -> GetCharacterListAction
+            is SeeDetailUIntent -> GoToDetailAction(id)
         }
     }
 
-    //private fun Flow<CharacterListResult>.handleEffect(): Flow<CharacterListResult> {
-    //    return onEach { change ->
-    //        val event = when (change) {
-    //            CharacterListResult.G -> NavigateToCharacterListUiEffect
-    //            else -> return@onEach
-    //        }
-    //        uiEffect.emit(event)
-    //    }
-    //}
+    private fun Flow<CharacterListResult>.handleEffect(): Flow<CharacterListResult> {
+        return onEach { change ->
+            val event = when (change) {
+                is NavigateToResult.GoToDetail -> NavigateToCharacterDetailUiEffect(change.id)
+                else -> return@onEach
+            }
+            uiEffect.emit(event)
+        }
+    }
 
     override fun uiStates(): StateFlow<CharacterListUiState> = uiState
     override fun uiEffect(): SharedFlow<CharacterListUiEffect> = uiEffect.asSharedFlow()

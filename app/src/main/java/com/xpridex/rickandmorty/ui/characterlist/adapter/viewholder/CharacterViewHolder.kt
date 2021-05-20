@@ -8,11 +8,11 @@ import com.xpridex.rickandmorty.domain.model.DomainCharacterItem
 class CharacterViewHolder(val binding: ViewItemCharacterBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(attrs: DomainCharacterItem, onClickListener: () -> Unit) {
+    fun bind(attrs: DomainCharacterItem, onClickListener: (Int) -> Unit) {
         binding.apply {
             name.text = attrs.name
             speciesAndStatus.text = "${attrs.species} - ${attrs.status} "
-            root.setOnClickListener { onClickListener.invoke() }
+            root.setOnClickListener { onClickListener.invoke(attrs.id) }
             Picasso.get().load(attrs.image)
                 .fit().centerCrop()
                 .into(image)
