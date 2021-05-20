@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -100,11 +102,11 @@ class CharacterListFragment : Fragment(), MviUi<CharacterListUIntent, CharacterL
     }
 
     private fun showLoading() {
-        TODO("Not yet implemented")
+        binding?.pbLoading?.visibility = VISIBLE
     }
 
     private fun hideLoading() {
-        TODO("Not yet implemented")
+        binding?.pbLoading?.visibility = INVISIBLE
     }
 
     override fun handleEffect(uiEffect: CharacterListUiEffect) {
