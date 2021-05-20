@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/slashFragment"
-        android:name="com.xpridex.rickandmorty.SlashFragment"
+        android:name="com.xpridex.rickandmorty.ui.splash.SplashFragment"
         android:label="fragment_slash"
-        tools:layout="@layout/fragment_slash" >
+        tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_slashFragment_to_characterListFragment"
             app:destination="@id/characterListFragment" />
@@ -17,9 +17,9 @@
 
     <fragment
         android:id="@+id/characterListFragment"
-        android:name="com.xpridex.rickandmorty.CharacterListFragment"
-        android:label="fragment_character_list"
-        tools:layout="@layout/fragment_character_list" >
+        android:name="com.xpridex.rickandmorty.ui.characterlist.CharacterListFragment"
+        android:label="Character List"
+        tools:layout="@layout/fragment_character_list">
         <action
             android:id="@+id/action_characterListFragment_to_characterDetailFragment"
             app:destination="@id/characterDetailFragment" />
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/characterDetailFragment"
-        android:name="com.xpridex.rickandmorty.CharacterDetailFragment"
-        android:label="fragment_character_detail"
+        android:name="com.xpridex.rickandmorty.ui.characterdetail.CharacterDetailFragment"
+        android:label="Character Detail"
         tools:layout="@layout/fragment_character_detail" />
 </navigation>

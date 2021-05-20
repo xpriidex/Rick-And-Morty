@@ -1,12 +1,15 @@
-package com.xpridex.rickandmorty
+package com.xpridex.rickandmorty.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.xpridex.rickandmorty.R
 import com.xpridex.rickandmorty.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
@@ -30,7 +33,13 @@ class MainActivity : AppCompatActivity() {
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navGraph = navHostFragment.navController.graph
         navHostFragment.navController.setGraph(navGraph, intent.extras)
-        appBarConfiguration = AppBarConfiguration(navHostFragment.navController.graph)
+        appBarConfiguration = AppBarConfiguration
+            .Builder(
+                R.id.characterDetailFragment,
+                R.id.characterListFragment
+            )
+            .build()
+
         setupActionBarWithNavController(navHostFragment.navController, appBarConfiguration)
     }
 
