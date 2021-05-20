@@ -26,6 +26,7 @@ class CharacterListProcessor @Inject constructor(
             }.onStart {
                 emit(GetCharacterListResult.InProgress)
             }.catch {
+                it
                 emit(GetCharacterListResult.Error)
             }
             .flowOn(coroutineThreadProvider.ioThread())

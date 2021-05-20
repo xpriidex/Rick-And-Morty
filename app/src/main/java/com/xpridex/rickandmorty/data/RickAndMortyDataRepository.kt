@@ -2,7 +2,7 @@ package com.xpridex.rickandmorty.data
 
 import com.xpridex.rickandmorty.data.mapper.DataCharacterListResponseMapper
 import com.xpridex.rickandmorty.data.source.RickAndMortyRemote
-import com.xpridex.rickandmorty.domain.model.DomainCharacterDetail
+import com.xpridex.rickandmorty.domain.model.DomainCharacterItem
 import com.xpridex.rickandmorty.domain.model.DomainCharacterList
 import com.xpridex.rickandmorty.domain.repository.RickAndMortyRepository
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +21,7 @@ class RickAndMortyDataRepository @Inject constructor(
         emit(characterList)
     }
 
-    override fun getCharacterDetail(id: String): Flow<DomainCharacterDetail> = flow {
+    override fun getCharacterDetail(id: String): Flow<DomainCharacterItem> = flow {
         val characterDetail = with(mapper) {
             remote.getCharacterDetail(id).toDomain()
         }

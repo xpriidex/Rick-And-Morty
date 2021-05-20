@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class RemoteInfo(
     @SerializedName("count")  val count: Int,
-    @SerializedName("next")  val next: String,
     @SerializedName("pages")  val pages: Int,
-    @SerializedName("prev")  val prev: Any
+    @SerializedName("next")  val next: String?,
+    @SerializedName("prev")  val prev: String?
 )

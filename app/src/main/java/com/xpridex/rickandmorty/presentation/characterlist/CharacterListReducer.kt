@@ -2,8 +2,8 @@ package com.xpridex.rickandmorty.presentation.characterlist
 
 import com.xpridex.rickandmorty.core.mvi.MviReducer
 import com.xpridex.rickandmorty.core.mvi.UnsupportedReduceException
-import com.xpridex.rickandmorty.presentation.characterlist.CharacterListResult.GetCharacterListResult.InProgress
-import com.xpridex.rickandmorty.presentation.characterlist.CharacterListResult.GetCharacterListResult.Success
+import com.xpridex.rickandmorty.presentation.characterlist.CharacterListResult.*
+import com.xpridex.rickandmorty.presentation.characterlist.CharacterListResult.GetCharacterListResult.*
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUiState.*
 import javax.inject.Inject
 
@@ -29,16 +29,14 @@ class CharacterListReducer @Inject constructor() :
 
     private infix fun LoadingUiState.reduce(result: CharacterListResult): CharacterListUiState {
         return when (result) {
-            is Success -> SuccessUiState
+            is Success -> SuccessUiState(result.results)
+            is Error -> ErrorUiState
             else -> throw UnsupportedReduceException(this, result)
         }
     }
 
     private infix fun SuccessUiState.reduce(result: CharacterListResult): CharacterListUiState {
-        return when (result) {
-            is Error -> ErrorUiState
-            else -> throw UnsupportedReduceException(this, result)
-        }
+        throw UnsupportedReduceException(this, result)
     }
 
     private infix fun ErrorUiState.reduce(result: CharacterListResult): CharacterListUiState {

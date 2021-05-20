@@ -7,17 +7,20 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.xpridex.rickandmorty.core.mvi.MviUi
 import com.xpridex.rickandmorty.core.mvi.MviUiEffect
 import com.xpridex.rickandmorty.databinding.FragmentCharacterListBinding
+import com.xpridex.rickandmorty.domain.model.DomainCharacterItem
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUIntent
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUIntent.*
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUiEffect
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUiState
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUiState.*
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListViewModel
+import com.xpridex.rickandmorty.ui.characterlist.adapter.ListCharacterAdapter
 import com.xpridex.rickandmorty.ui.navigator.Navigator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -81,9 +84,9 @@ class CharacterListFragment : Fragment(), MviUi<CharacterListUIntent, CharacterL
     override fun renderUiStates(uiState: CharacterListUiState) {
         when (uiState) {
             LoadingUiState -> showLoading()
-            SuccessUiState -> {
+            is SuccessUiState -> {
                 hideLoading()
-                showCharacters()
+                showCharacters(uiState.characters)
             }
 
             ErrorUiState -> {
@@ -94,11 +97,22 @@ class CharacterListFragment : Fragment(), MviUi<CharacterListUIntent, CharacterL
     }
 
     private fun showError() {
-        TODO("Not yet implemented")
+        binding?.apply {
+            avMortyCryError.visibility = VISIBLE
+            btnRetry.visibility = VISIBLE
+        }
     }
 
-    private fun showCharacters() {
-        TODO("Not yet implemented")
+    private fun showCharacters(characters: List<DomainCharacterItem>) {
+        val adapter = ListCharacterAdapter(characters) {
+            context?.let {
+                Toast.makeText(it, "Hello Javatpoint", Toast.LENGTH_LONG).show()
+            }
+        }
+        binding?.apply {
+            rvCharacters.adapter = adapter
+            rvCharacters.visibility = VISIBLE
+        }
     }
 
     private fun showLoading() {
@@ -118,7 +132,6 @@ class CharacterListFragment : Fragment(), MviUi<CharacterListUIntent, CharacterL
     private fun goToCharacterEdit(id: String) {
         TODO("Not yet implemented")
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
