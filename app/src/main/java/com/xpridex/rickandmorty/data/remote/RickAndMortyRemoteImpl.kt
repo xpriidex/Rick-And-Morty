@@ -10,5 +10,5 @@ class RickAndMortyRemoteImpl @Inject constructor(private val restApi: RickAndMor
 
     override suspend fun getCharacterList(): RemoteCharacterListResponse  = restApi.getCharacterList()
 
-    override suspend fun getCharacterDetail(id: String): RemoteCharacterDetailResponse  = restApi.getCharacterDetail(id)
+    override suspend fun getCharacterDetail(id: Int): RemoteCharacterDetailResponse  = restApi.getCharacterDetail(id)
 }

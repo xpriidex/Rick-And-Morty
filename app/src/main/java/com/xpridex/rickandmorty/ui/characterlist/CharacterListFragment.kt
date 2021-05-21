@@ -1,13 +1,12 @@
 package com.xpridex.rickandmorty.ui.characterlist
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.xpridex.rickandmorty.core.mvi.MviUi
@@ -15,7 +14,8 @@ import com.xpridex.rickandmorty.core.mvi.MviUiEffect
 import com.xpridex.rickandmorty.databinding.FragmentCharacterListBinding
 import com.xpridex.rickandmorty.domain.model.DomainCharacterItem
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUIntent
-import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUIntent.*
+import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUIntent.InitialUIntent
+import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUIntent.SeeDetailUIntent
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUiEffect
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUiState
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUiState.*
@@ -47,6 +47,7 @@ class CharacterListFragment : Fragment(), MviUi<CharacterListUIntent, CharacterL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupCollectors()
+        statesProcessIntents()
     }
 
     override fun onCreateView(
@@ -58,11 +59,6 @@ class CharacterListFragment : Fragment(), MviUi<CharacterListUIntent, CharacterL
             binding = FragmentCharacterListBinding.inflate(inflater, container, false)
         }
         return binding?.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        statesProcessIntents()
     }
 
     private fun statesProcessIntents() {

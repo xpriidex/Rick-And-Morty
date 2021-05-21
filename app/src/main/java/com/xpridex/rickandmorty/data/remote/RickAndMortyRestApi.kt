@@ -11,5 +11,5 @@ interface RickAndMortyRestApi {
     suspend fun getCharacterList() : RemoteCharacterListResponse
 
     @GET("character/{id}")
-    suspend fun getCharacterDetail(@Path("id") id: String): RemoteCharacterDetailResponse
+    suspend fun getCharacterDetail(@Path("id") id: Int): RemoteCharacterDetailResponse
 }

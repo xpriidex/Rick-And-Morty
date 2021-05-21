@@ -6,5 +6,5 @@ import com.xpridex.rickandmorty.data.remote.model.RemoteCharacterListResponse
 
 interface RickAndMortyRemote {
     suspend fun getCharacterList(): RemoteCharacterListResponse
-    suspend fun getCharacterDetail(id:String): RemoteCharacterDetailResponse
+    suspend fun getCharacterDetail(id: Int): RemoteCharacterDetailResponse
 }

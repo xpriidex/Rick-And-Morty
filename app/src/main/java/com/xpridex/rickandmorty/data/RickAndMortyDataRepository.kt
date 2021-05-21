@@ -1,8 +1,8 @@
 package com.xpridex.rickandmorty.data
 
-import com.xpridex.rickandmorty.data.mapper.DataCharacterListResponseMapper
+import com.xpridex.rickandmorty.data.mapper.DataResponseMapper
 import com.xpridex.rickandmorty.data.source.RickAndMortyRemote
-import com.xpridex.rickandmorty.domain.model.DomainCharacterItem
+import com.xpridex.rickandmorty.domain.model.DomainCharacterDetail
 import com.xpridex.rickandmorty.domain.model.DomainCharacterList
 import com.xpridex.rickandmorty.domain.repository.RickAndMortyRepository
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class RickAndMortyDataRepository @Inject constructor(
     private val remote: RickAndMortyRemote,
-    private val mapper: DataCharacterListResponseMapper
+    private val mapper: DataResponseMapper
 ) : RickAndMortyRepository {
 
     override fun getCharacterList(): Flow<DomainCharacterList> = flow {
@@ -21,9 +21,9 @@ class RickAndMortyDataRepository @Inject constructor(
         emit(characterList)
     }
 
-    override fun getCharacterDetail(id: String): Flow<DomainCharacterItem> = flow {
+    override fun getCharacterDetail(id: Int): Flow<DomainCharacterDetail> = flow {
         val characterDetail = with(mapper) {
-            remote.getCharacterDetail(id).toDomain()
+            remote.getCharacterDetail(id).toDomainDetail()
         }
         emit(characterDetail)
     }
