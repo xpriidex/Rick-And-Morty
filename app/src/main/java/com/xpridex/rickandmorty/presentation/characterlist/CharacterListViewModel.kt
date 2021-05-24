@@ -8,9 +8,6 @@ import com.xpridex.rickandmorty.presentation.characterlist.CharacterListAction.*
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListResult.*
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUIntent.*
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUiEffect.*
-import com.xpridex.rickandmorty.presentation.splash.SplashUiEffect
-import com.xpridex.rickandmorty.presentation.splash.SplashUiEffect.*
-
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -49,7 +46,7 @@ class CharacterListViewModel @Inject constructor(
 
     private fun CharacterListUIntent.toAction(): CharacterListAction {
         return when (this) {
-            InitialUIntent -> GetCharacterListAction
+            InitialUIntent, RetrySeeCharacterListUIntent -> GetCharacterListAction
             is SeeDetailUIntent -> GoToDetailAction(id)
         }
     }

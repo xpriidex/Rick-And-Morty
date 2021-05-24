@@ -1,7 +1,7 @@
 package com.xpridex.rickandmorty.ui.di
 
 
-import com.xpridex.rickandmorty.core.execution.AppCoroutineExecutionThread
+import com.xpridex.rickandmorty.core.execution.ExecutionThread
 import com.xpridex.rickandmorty.core.execution.CoroutineExecutionThread
 import dagger.Module
 import dagger.Provides
@@ -17,6 +17,6 @@ class CoroutineDispatcherModule {
     @Reusable
     @Provides
     fun provideCoroutineDispatchers(): CoroutineExecutionThread {
-        return AppCoroutineExecutionThread()
+        return ExecutionThread()
     }
 }

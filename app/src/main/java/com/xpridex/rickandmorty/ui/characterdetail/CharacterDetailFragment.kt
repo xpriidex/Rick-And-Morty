@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -27,6 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -58,6 +60,11 @@ class CharacterDetailFragment : Fragment(), MviUi<CharacterDetailUIntent, Charac
         return binding?.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupListener()
+    }
+
     private fun statesProcessIntents() {
         viewModel.run {
             viewModel.processUserIntents(userIntents())
@@ -73,6 +80,18 @@ class CharacterDetailFragment : Fragment(), MviUi<CharacterDetailUIntent, Charac
         emit(InitialUIntent(args.id))
     }
 
+    private fun onRetryTapped() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            userIntents.emit(RetrySeeCharacterDetailUIntent(args.id))
+        }
+    }
+
+    private fun setupListener() {
+        binding?.btnRetry?.setOnClickListener {
+            onRetryTapped()
+        }
+    }
+
     private fun setupCollectors() {
         with(viewModel) {
             uiStates().onEach { renderUiStates(it) }.launchIn(lifecycleScope)
@@ -82,6 +101,7 @@ class CharacterDetailFragment : Fragment(), MviUi<CharacterDetailUIntent, Charac
     override fun renderUiStates(uiState: CharacterDetailUiState) {
         when (uiState) {
             LoadingUiState -> showLoading()
+
             is SuccessUiState -> {
                 hideLoading()
                 showCharacterDetail(uiState.character)
@@ -96,17 +116,6 @@ class CharacterDetailFragment : Fragment(), MviUi<CharacterDetailUIntent, Charac
 
     private fun showCharacterDetail(character: DomainCharacterDetail) {
         binding?.apply {
-            tvSpeciesLabel.visibility = VISIBLE
-            tvSpeciesValue.visibility = VISIBLE
-            tvGenderLabel.visibility = VISIBLE
-            tvGenderValue.visibility = VISIBLE
-            tvName.visibility = VISIBLE
-            tvStatusLabel.visibility = VISIBLE
-            tvStatusValue.visibility = VISIBLE
-
-
-
-
             tvSpeciesValue.text = character.species
             tvName.text = character.name
             tvStatusValue.text = character.status
@@ -114,22 +123,23 @@ class CharacterDetailFragment : Fragment(), MviUi<CharacterDetailUIntent, Charac
             Picasso.get().load(character.image)
                 .fit().centerCrop()
                 .into(ivCharacter)
+            clSuccessContent.visibility = VISIBLE
         }
     }
 
     private fun showLoading() {
-        binding?.pbLoading?.visibility = VISIBLE
-    }
-
-    private fun hideLoading() {
-        binding?.pbLoading?.visibility = View.INVISIBLE
-    }
-
-    private fun showError() {
         binding?.apply {
-            avMortyCryError.visibility = VISIBLE
-            btnRetry.visibility = VISIBLE
+            pbLoading.visibility = VISIBLE
+            clSuccessContent.visibility = GONE
+            clErrorContent.visibility = GONE
         }
     }
 
+    private fun hideLoading() {
+        binding?.pbLoading?.visibility = GONE
+    }
+
+    private fun showError() {
+        binding?.clErrorContent?.visibility = VISIBLE
+    }
 }

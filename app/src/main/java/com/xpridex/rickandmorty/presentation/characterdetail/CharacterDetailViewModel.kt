@@ -41,6 +41,7 @@ class CharacterDetailViewModel @Inject constructor(
     private fun CharacterDetailUIntent.toAction(): CharacterDetailAction {
         return when (this) {
             is InitialUIntent -> GetCharacterDetailAction(id)
+            is RetrySeeCharacterDetailUIntent -> GetCharacterDetailAction(id)
         }
     }
 

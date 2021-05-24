@@ -14,8 +14,7 @@ import com.xpridex.rickandmorty.core.mvi.MviUiEffect
 import com.xpridex.rickandmorty.databinding.FragmentCharacterListBinding
 import com.xpridex.rickandmorty.domain.model.DomainCharacterItem
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUIntent
-import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUIntent.InitialUIntent
-import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUIntent.SeeDetailUIntent
+import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUIntent.*
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUiEffect
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUiState
 import com.xpridex.rickandmorty.presentation.characterlist.CharacterListUiState.*
@@ -61,6 +60,11 @@ class CharacterListFragment : Fragment(), MviUi<CharacterListUIntent, CharacterL
         return binding?.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupListener()
+    }
+
     private fun statesProcessIntents() {
         viewModel.run {
             viewModel.processUserIntents(userIntents())
@@ -76,10 +80,20 @@ class CharacterListFragment : Fragment(), MviUi<CharacterListUIntent, CharacterL
         emit(InitialUIntent)
     }
 
+    private fun onRetryTapped() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            userIntents.emit(RetrySeeCharacterListUIntent)
+        }
+    }
+
     private fun onItemCharacterTapped(id: Int) {
         viewLifecycleOwner.lifecycleScope.launch {
             userIntents.emit(SeeDetailUIntent(id))
         }
+    }
+
+    private fun setupListener() {
+        binding?.btnRetry?.setOnClickListener { onRetryTapped() }
     }
 
     private fun setupCollectors() {
@@ -92,6 +106,7 @@ class CharacterListFragment : Fragment(), MviUi<CharacterListUIntent, CharacterL
     override fun renderUiStates(uiState: CharacterListUiState) {
         when (uiState) {
             LoadingUiState -> showLoading()
+
             is SuccessUiState -> {
                 hideLoading()
                 showCharacters(uiState.characters)

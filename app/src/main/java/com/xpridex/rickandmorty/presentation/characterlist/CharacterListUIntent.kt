@@ -6,5 +6,7 @@ sealed class CharacterListUIntent : MviUserIntent {
 
     object InitialUIntent : CharacterListUIntent()
 
+    object RetrySeeCharacterListUIntent : CharacterListUIntent()
+
     data class SeeDetailUIntent(val id: Int) : CharacterListUIntent()
 }

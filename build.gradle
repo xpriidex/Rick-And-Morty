@@ -6,6 +6,8 @@ buildscript {
         lottie_version = "3.7.0"
         coroutines_version = "1.4.3"
         hilt_version = "2.31.2-alpha"
+
+        testing_mockK_version = '1.10.0'
     }
 
     repositories {
