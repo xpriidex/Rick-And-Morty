@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_slashFragment_to_characterListFragment"
-            app:destination="@id/characterListFragment" />
+            app:destination="@id/characterListFragment"
+            app:popUpTo="@+id/slashFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -29,7 +31,7 @@
         android:id="@+id/characterDetailFragment"
         android:name="com.xpridex.rickandmorty.ui.characterdetail.CharacterDetailFragment"
         android:label="Character Detail"
-        tools:layout="@layout/fragment_character_detail" >
+        tools:layout="@layout/fragment_character_detail">
         <argument
             android:name="id"
             app:argType="integer" />
